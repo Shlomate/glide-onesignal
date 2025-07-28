@@ -9,6 +9,40 @@
   <p style="font-family:sans-serif">Registering your browser…</p>
 
   <script src="/OneSignalSDK.js"></script>
+<script>
+  function qs(name) {
+    return new URLSearchParams(window.location.search).get(name);
+  }
+
+  window.OneSignal = window.OneSignal || [];
+
+  OneSignal.push(function () {
+    OneSignal.init({
+      appId: "481e17b3-02d0-4b2c-9b8b-18f1b606e8d2",
+      notifyButton: { enable: false },
+      allowLocalhostAsSecureOrigin: true
+    });
+
+    OneSignal.showSlidedownPrompt();
+
+    OneSignal.getUserId().then(function(pid) {
+      const uid = qs("uid");
+      console.log("UID:", uid);
+      console.log("PID:", pid);
+
+      if (pid && uid) {
+        fetch("https://hook.eu1.make.com/ibs4pskbeqabsejzasf41hpjah2xwgg2", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ uid, pid })
+        });
+      }
+
+      document.body.innerHTML = "<h2>👍 You’ll now receive alerts. You can close this tab.</h2>";
+    });
+  });
+</script>
+
 
 
 
