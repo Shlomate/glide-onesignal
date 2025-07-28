@@ -4,40 +4,46 @@
   <meta charset="utf-8" />
   <title>Register for push</title>
   <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
+</head>
+<body>
+  <p style="font-family:sans-serif">Registering your browser…</p>
+
   <script>
     function qs(name) {
       return new URLSearchParams(window.location.search).get(name);
     }
 
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async () => {
-      const OneSignal = window.OneSignal;
-      await OneSignal.init({
-        appId: "481e17b3-02d0-4b2c-9b8b-18f1b606e8d2", 
-        notifyButton: { enable: false },
-        allowLocalhostAsSecureOrigin: true
+    window.onload = function () {
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      window.OneSignalDeferred.push(function () {
+        const OneSignal = window.OneSignal;
+
+        OneSignal.init({
+          appId: "481e17b3-02d0-4b2c-9b8b-18f1b606e8d2",
+          notifyButton: { enable: false },
+          allowLocalhostAsSecureOrigin: true
+        });
+
+        OneSignal.showSlidedownPrompt();
+
+        OneSignal.getUserId().then(function(pid) {
+          const uid = qs("uid");
+
+          console.log("UID:", uid);
+          console.log("PID:", pid);
+
+          if (pid && uid) {
+            fetch("https://hook.eu1.make.com/ibs4pskbeqabsejzasf41hpjah2xwgg2", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ uid, pid })
+            });
+          }
+
+          document.body.innerHTML = "<h2>👍 You’ll now receive alerts. You can close this tab.</h2>";
+        });
       });
-
-      await OneSignal.showSlidedownPrompt();
-
-      const pid = await OneSignal.getUserId();
-      const uid = qs("uid");
-
-console.log("UID:", uid);
-console.log("PID:", pid);
-
-      
-      fetch("https://hook.eu1.make.com/ibs4pskbeqabsejzasf41hpjah2xwgg2", { 
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ uid, pid })
-      });
-
-      document.body.innerHTML = "<h2>👍 You’ll now receive alerts. You can close this tab.</h2>";
-    });
+    };
   </script>
-</head>
-<body>
-  <p style="font-family:sans-serif">Registering your browser…</p>
 </body>
 </html>
