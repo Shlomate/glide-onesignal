@@ -23,6 +23,10 @@
       const pid = await OneSignal.getUserId();
       const uid = qs("uid");
 
+console.log("UID:", uid);
+console.log("PID:", pid);
+
+      
       fetch("https://hook.eu1.make.com/ibs4pskbeqabsejzasf41hpjah2xwgg2", { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
