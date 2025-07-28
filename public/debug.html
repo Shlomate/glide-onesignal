@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Push Test</title>
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async></script>
+</head>
+<body>
+  <h2>Testing push...</h2>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    window.OneSignalDeferred.push(function () {
+      console.log("🟢 OneSignal loaded");
+      window.OneSignal.init({
+        appId: "481e17b3-02d0-4b2c-9b8b-18f1b606e8d2",
+        notifyButton: { enable: true },
+        allowLocalhostAsSecureOrigin: true
+      });
+    });
+  </script>
+</body>
+</html>
